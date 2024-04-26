@@ -2,5 +2,8 @@
   "extends": [
     "next/core-web-vitals",
     "@rocketseat/eslint-config/next"
+  ],
+  "plugins": [
+    "prettier-plugin-tailwindcss"
   ]
 }
