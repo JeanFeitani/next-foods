@@ -4,7 +4,15 @@ import { calculateProductTotalPrice, formatCurrency } from '../lib/price'
 import { ArrowDownIcon } from 'lucide-react'
 
 interface ProductItemProps {
-  product: Prisma.ProductGetPayload<{ include: { restaurant: true } }>
+  product: Prisma.ProductGetPayload<{
+    include: {
+      restaurant: {
+        select: {
+          name: true
+        }
+      }
+    }
+  }>
 }
 
 const ProductItem = ({ product }: ProductItemProps) => {
