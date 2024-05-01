@@ -11,7 +11,6 @@ interface RestaurantItemProps {
 const RestaurantItem = ({ restaurant }: RestaurantItemProps) => {
   return (
     <div className="min-w-[266px] max-w-[266px] space-y-3">
-      {/* IMAGEM */}
       <div className="relative h-[136px] w-full">
         <Image
           src={restaurant.imageUrl}
@@ -32,12 +31,9 @@ const RestaurantItem = ({ restaurant }: RestaurantItemProps) => {
           <HeartIcon size={16} className="fill-white" />
         </Button>
       </div>
-      {/* TEXTO */}
       <div>
         <h3 className="text-sm font-semibold">{restaurant.name}</h3>
-        {/* INFORMAÇÕES DA ENTREGA */}
         <div className="flex gap-3">
-          {/* CUSTO DE ENTREGA */}
           <div className="flex items-center gap-1">
             <BikeIcon className="text-primary" size={14} />
             <span className="text-xs text-muted-foreground">
@@ -46,7 +42,6 @@ const RestaurantItem = ({ restaurant }: RestaurantItemProps) => {
                 : formatCurrency(Number(restaurant.deliveryFee))}
             </span>
           </div>
-          {/* TEMPO DE ENTREGA */}
           <div className="flex items-center gap-1">
             <TimerIcon className="text-primary" size={14} />
             <span className="text-xs text-muted-foreground">
