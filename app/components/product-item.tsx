@@ -3,6 +3,7 @@ import Image from 'next/image'
 import { calculateProductTotalPrice, formatCurrency } from '../lib/price'
 import { ArrowDownIcon } from 'lucide-react'
 import Link from 'next/link'
+import { cn } from '../lib/utils'
 
 interface ProductItemProps {
   product: Prisma.ProductGetPayload<{
@@ -14,11 +15,15 @@ interface ProductItemProps {
       }
     }
   }>
+  className?: string
 }
 
-const ProductItem = ({ product }: ProductItemProps) => {
+const ProductItem = ({ product, className }: ProductItemProps) => {
   return (
-    <Link className="min-w-[150px]" href={`/products/${product.id}`}>
+    <Link
+      className={cn('min-w-[150px]', className)}
+      href={`/products/${product.id}`}
+    >
       <div className="w-full space-y-2">
         <div className="relative h-[150px] w-full">
           <Image
@@ -27,7 +32,7 @@ const ProductItem = ({ product }: ProductItemProps) => {
             fill
             className="rounded-lg object-cover shadow-md"
           />
-          {product.discountPercentage && (
+          {product.discountPercentage > 0 && (
             <div className="absolute left-2 top-2 flex items-center gap-[2px] rounded-full bg-primary px-2 py-[2px] text-white">
               <ArrowDownIcon size={12} />
               <span className="text-xs font-semibold">

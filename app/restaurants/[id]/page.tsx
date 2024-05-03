@@ -11,9 +11,26 @@ interface RestaurantsPageProps {
 
 const RestaurantsPage = async ({ params: { id } }: RestaurantsPageProps) => {
   const restaurant = await db.restaurant.findUnique({
-    where: { id },
+    where: {
+      id,
+    },
     include: {
-      categories: true,
+      categories: {
+        include: {
+          products: {
+            where: {
+              restaurantId: id,
+            },
+            include: {
+              restaurant: {
+                select: {
+                  name: true,
+                },
+              },
+            },
+          },
+        },
+      },
       products: {
         take: 10,
         include: {
@@ -31,21 +48,11 @@ const RestaurantsPage = async ({ params: { id } }: RestaurantsPageProps) => {
     return notFound()
   }
 
-  const complementaryProducts = await db.product.findMany({
-    where: {
-      category: { name: 'Comida Japonesa' },
-    },
-    include: { restaurant: true },
-  })
-
   return (
     <div>
       <RestaurantImage restaurant={restaurant} />
 
-      <RestaurantDetails
-        restaurant={restaurant}
-        complementaryProducts={complementaryProducts}
-      />
+      <RestaurantDetails restaurant={restaurant} />
     </div>
   )
 }

@@ -9,20 +9,16 @@ import Image from 'next/image'
 interface RestaurantDetailsProps {
   restaurant: Prisma.RestaurantGetPayload<{
     include: {
-      categories: true
+      categories: {
+        include: {
+          products: true
+        }
+      }
     }
   }>
-  complementaryProducts: Prisma.ProductGetPayload<{
-    include: {
-      restaurant: true
-    }
-  }>[]
 }
 
-const RestaurantDetails = ({
-  restaurant,
-  complementaryProducts,
-}: RestaurantDetailsProps) => {
+const RestaurantDetails = ({ restaurant }: RestaurantDetailsProps) => {
   return (
     <div className="relative z-50 mt-[-1.5rem] rounded-tl-3xl rounded-tr-3xl bg-white py-5">
       <div className="flex items-center justify-between px-5">
@@ -60,11 +56,13 @@ const RestaurantDetails = ({
         ))}
       </div>
 
-      <div className="mt-6 space-y-4">
-        <h2 className="px-5 font-semibold">Mais pedidos</h2>
-
-        <ProductsList products={complementaryProducts} />
-      </div>
+      {restaurant.categories.map((category) => (
+        <div key={category.id} className="mt-6 space-y-4">
+          <h2 className="px-5 font-semibold">{category.name}</h2>
+          {/* @ts-expect-error mudar isso em */}
+          <ProductsList products={category.products} />
+        </div>
+      ))}
     </div>
   )
 }
