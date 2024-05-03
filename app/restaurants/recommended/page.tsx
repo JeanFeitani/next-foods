@@ -7,7 +7,11 @@ const RecommendedRestaurants = async () => {
   return (
     <div>
       {restaurants.map((restarurant) => (
-        <RestaurantItem key={restarurant.id} restaurant={restarurant} />
+        <RestaurantItem
+          className="flex max-w-full flex-col gap-6 px-5"
+          key={restarurant.id}
+          restaurant={restarurant}
+        />
       ))}
     </div>
   )
