@@ -7,7 +7,6 @@ interface ProductPageProps {
   params: {
     id: string
   }
-  include: { restaurant: true }
 }
 
 const ProductPage = async ({ params: { id } }: ProductPageProps) => {
