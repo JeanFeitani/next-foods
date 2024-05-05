@@ -1,8 +1,12 @@
 'use client'
 
 import { calculateProductTotalPrice } from '@/app/lib/price'
-import { Prisma, Product } from '@prisma/client'
+import { Prisma } from '@prisma/client'
 import { createContext, useMemo, useState } from 'react'
+
+// type CartProductWithRestaurant = Prisma.ProductGetPayload<{
+//   include: { restaurant: { select: { deliveryFee: true } } }
+// }>
 
 export interface CartProduct
   extends Prisma.ProductGetPayload<{
@@ -16,7 +20,7 @@ interface ICartContext {
   totalPrice: number
   totalDiscounts: number
   products: CartProduct[]
-  addProduct: (product: Product, quantity: number) => void
+  addProduct: (product: CartProduct, resetCart: boolean) => void
   removeProduct: (productId: string) => void
   updateProductQuantity: (productId: string, quantity: number) => void
 }
@@ -42,16 +46,22 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
   }, [products])
 
   const totalPrice = useMemo(() => {
-    return products.reduce(
-      (acc, product) =>
-        acc + calculateProductTotalPrice(product) * product.quantity,
-      0,
+    return (
+      products.reduce(
+        (acc, product) =>
+          acc + calculateProductTotalPrice(product) * product.quantity,
+        0,
+      ) + Number(products[0]?.restaurant.deliveryFee)
     )
   }, [products])
 
   const totalDiscounts = subtotalPrice - totalPrice
 
-  const addProduct = (product: Product, quantity: number) => {
+  const addProduct = (product: CartProduct, resetCart: boolean) => {
+    if (resetCart) {
+      setProducts([])
+    }
+
     const isProductAlredyOnCart = products.some(
       (cartProduct) => cartProduct.id === product.id,
     )
@@ -60,18 +70,17 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
       return setProducts((prevProducts) =>
         prevProducts.map((cartProduct) =>
           cartProduct.id === product.id
-            ? { ...cartProduct, quantity: cartProduct.quantity + quantity }
+            ? {
+                ...cartProduct,
+                quantity: cartProduct.quantity + product.quantity,
+              }
             : cartProduct,
         ),
       )
     }
 
-    setProducts(
-      (prevProducts) =>
-        [...prevProducts, { ...product, quantity }] as CartProduct[],
-    )
+    setProducts((prevProducts) => [...prevProducts, { ...product }])
   }
-  // A resolver a linha acima
 
   const removeProduct = (productId: string) => {
     setProducts((prevProducts) =>
