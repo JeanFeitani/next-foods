@@ -89,7 +89,7 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
   }
 
   const updateProductQuantity = (productId: string, quantity: number) => {
-    if (quantity < 1) {
+    if (quantity < 1 || quantity > 99) {
       return
     }
 
