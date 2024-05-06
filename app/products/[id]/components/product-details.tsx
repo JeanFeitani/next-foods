@@ -50,14 +50,14 @@ const ProductDetails = ({
   const [isConfirmationDialogOpen, setIsConfirmationDialogOpen] =
     useState(false)
 
-  const { addProduct, products } = useContext(CartContext)
+  const { addProductToCart, products } = useContext(CartContext)
 
   const addToCart = ({
     shouldResetCart = false,
   }: {
     shouldResetCart?: boolean
   }) => {
-    addProduct({ ...product, quantity }, shouldResetCart)
+    addProductToCart({ ...product, quantity }, shouldResetCart)
     setIsCartOpen(true)
   }
 

@@ -21,7 +21,7 @@ interface ICartContext {
   totalDiscounts: number
   totalQuantity: number
   products: CartProduct[]
-  addProduct: (product: CartProduct, resetCart: boolean) => void
+  addProductToCart: (product: CartProduct, resetCart: boolean) => void
   removeProduct: (productId: string) => void
   updateProductQuantity: (productId: string, quantity: number) => void
   clearCart: () => void
@@ -29,7 +29,7 @@ interface ICartContext {
 
 export const CartContext = createContext<ICartContext>({
   products: [],
-  addProduct: () => {},
+  addProductToCart: () => {},
   removeProduct: () => {},
   updateProductQuantity: () => {},
   clearCart: () => {},
@@ -74,7 +74,7 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
   const totalDiscounts =
     subtotalPrice - totalPrice + Number(products[0]?.restaurant.deliveryFee)
 
-  const addProduct = (product: CartProduct, shouldClearCart: boolean) => {
+  const addProductToCart = (product: CartProduct, shouldClearCart: boolean) => {
     if (shouldClearCart) {
       clearCart()
     }
@@ -121,7 +121,7 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
     <CartContext.Provider
       value={{
         products,
-        addProduct,
+        addProductToCart,
         removeProduct,
         updateProductQuantity,
         subtotalPrice,

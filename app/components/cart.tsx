@@ -17,11 +17,15 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from './ui/alert-dialog'
+import { toast } from 'sonner'
+import { useRouter } from 'next/navigation'
 
 const Cart = () => {
   const { data } = useSession()
   const [inConfirmDialogOpen, setConfirmDialogOpen] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
+
+  const router = useRouter()
 
   const { products, totalPrice, totalDiscounts, subtotalPrice, clearCart } =
     useContext(CartContext)
@@ -31,33 +35,46 @@ const Cart = () => {
 
     const restaurant = products[0]?.restaurant
 
-    setIsSubmitting(true)
+    try {
+      setIsSubmitting(true)
 
-    const order = await createOrderAction({
-      subtotalPrice,
-      totalDiscounts,
-      totalPrice,
-      deliveryFee: restaurant?.deliveryFee ?? 0,
-      deliveryTimeInMinutes: restaurant?.deliveryTimeMinutes ?? 0,
-      restaurant: {
-        connect: { id: restaurant.id },
-      },
-      status: 'PENDING',
-      user: {
-        connect: { id: data.user.id },
-      },
-    })
+      await createOrderAction({
+        subtotalPrice,
+        totalDiscounts,
+        totalPrice,
+        deliveryFee: restaurant?.deliveryFee ?? 0,
+        deliveryTimeInMinutes: restaurant?.deliveryTimeMinutes ?? 0,
+        restaurant: {
+          connect: { id: restaurant.id },
+        },
+        status: 'PENDING',
+        user: {
+          connect: { id: data.user.id },
+        },
+        orderProducts: {
+          createMany: {
+            data: products.map((product) => ({
+              productId: product.id,
+              quantity: product.quantity,
+            })),
+          },
+        },
+      })
 
-    console.log(order)
-
-    if (order) {
-      alert('Pedido criado com sucesso!')
       clearCart()
-      window.location.href = '/'
-    } else {
-      alert('Erro ao criar pedido, tente novamente.')
-    }
 
+      toast('Pedido Finalizado', {
+        description: 'Você pode acompanhà-lo na tela dos seus pedidos',
+        action: {
+          label: 'Meus Pedidos',
+          onClick: () => router.push('/my-order'),
+        },
+      })
+    } catch (e) {
+      toast.error('Erro ao Finalizar Pedido', {
+        description: 'Algo deu errado ao tentar fazer o seu pedido',
+      })
+    }
     setIsSubmitting(false)
   }
 
@@ -91,7 +108,7 @@ const Cart = () => {
                         ? formatCurrency(
                             Number(products[0]?.restaurant.deliveryFee),
                           )
-                        : 'Gratis'}
+                        : 'Grátis'}
                     </span>
                   </div>
                   <Separator />
