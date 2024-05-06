@@ -24,6 +24,7 @@ interface ICartContext {
   addProduct: (product: CartProduct, resetCart: boolean) => void
   removeProduct: (productId: string) => void
   updateProductQuantity: (productId: string, quantity: number) => void
+  clearCart: () => void
 }
 
 export const CartContext = createContext<ICartContext>({
@@ -31,6 +32,7 @@ export const CartContext = createContext<ICartContext>({
   addProduct: () => {},
   removeProduct: () => {},
   updateProductQuantity: () => {},
+  clearCart: () => {},
   subtotalPrice: 0,
   totalPrice: 0,
   totalDiscounts: 0,
@@ -39,6 +41,10 @@ export const CartContext = createContext<ICartContext>({
 
 export const CartProvider = ({ children }: { children: React.ReactNode }) => {
   const [products, setProducts] = useState<CartProduct[]>([])
+
+  const clearCart = () => {
+    setProducts([])
+  }
 
   const totalQuantity = useMemo(
     () =>
@@ -68,9 +74,9 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
   const totalDiscounts =
     subtotalPrice - totalPrice + Number(products[0]?.restaurant.deliveryFee)
 
-  const addProduct = (product: CartProduct, resetCart: boolean) => {
-    if (resetCart) {
-      setProducts([])
+  const addProduct = (product: CartProduct, shouldClearCart: boolean) => {
+    if (shouldClearCart) {
+      clearCart()
     }
 
     const isProductAlredyOnCart = products.some(
@@ -122,6 +128,7 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
         totalPrice,
         totalDiscounts,
         totalQuantity,
+        clearCart,
       }}
     >
       {children}
