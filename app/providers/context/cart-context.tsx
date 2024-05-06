@@ -19,6 +19,7 @@ interface ICartContext {
   subtotalPrice: number
   totalPrice: number
   totalDiscounts: number
+  totalQuantity: number
   products: CartProduct[]
   addProduct: (product: CartProduct, resetCart: boolean) => void
   removeProduct: (productId: string) => void
@@ -33,10 +34,19 @@ export const CartContext = createContext<ICartContext>({
   subtotalPrice: 0,
   totalPrice: 0,
   totalDiscounts: 0,
+  totalQuantity: 0,
 })
 
 export const CartProvider = ({ children }: { children: React.ReactNode }) => {
   const [products, setProducts] = useState<CartProduct[]>([])
+
+  const totalQuantity = useMemo(
+    () =>
+      products.reduce((acc, product) => {
+        return acc + product.quantity
+      }, 0),
+    [products],
+  )
 
   const subtotalPrice = useMemo(() => {
     return products.reduce(
@@ -55,7 +65,8 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
     )
   }, [products])
 
-  const totalDiscounts = subtotalPrice - totalPrice
+  const totalDiscounts =
+    subtotalPrice - totalPrice + Number(products[0]?.restaurant.deliveryFee)
 
   const addProduct = (product: CartProduct, resetCart: boolean) => {
     if (resetCart) {
@@ -110,6 +121,7 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
         subtotalPrice,
         totalPrice,
         totalDiscounts,
+        totalQuantity,
       }}
     >
       {children}

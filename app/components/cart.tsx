@@ -35,7 +35,7 @@ const Cart = () => {
                 <Separator />
                 <div className="flex items-center justify-between text-sm">
                   <span className="text-muted-foreground">Entrega</span>
-                  <span className="uppercase text-primary ">
+                  <span className="uppercase text-primary">
                     {Number(products[0]?.restaurant.deliveryFee) > 0
                       ? formatCurrency(
                           Number(products[0]?.restaurant.deliveryFee),
