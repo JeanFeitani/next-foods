@@ -5,10 +5,41 @@ import { Card, CardContent } from './ui/card'
 import { formatCurrency } from '../lib/price'
 import { Separator } from '@/app/components/ui/separator'
 import { Button } from './ui/button'
+import { useSession } from 'next-auth/react'
+import { createOrderAction } from '../actions/create-order-action'
 
 const Cart = () => {
   const { products, totalPrice, totalDiscounts, subtotalPrice } =
     useContext(CartContext)
+
+  const { data } = useSession()
+
+  const handleFinishOrderClick = async () => {
+    if (!data?.user) return
+
+    const restaurant = products[0]?.restaurant
+
+    const order = await createOrderAction({
+      subtotalPrice,
+      totalDiscounts,
+      totalPrice,
+      deliveryFee: restaurant?.deliveryFee ?? 0,
+      deliveryTimeInMinutes: restaurant?.deliveryTimeMinutes ?? 0,
+      restaurant: {
+        connect: { id: restaurant.id },
+      },
+      status: 'PENDING',
+      user: {
+        connect: { id: data.user.id },
+      },
+    })
+    if (order) {
+      alert('Pedido criado com sucesso!')
+      window.location.href = '/'
+    } else {
+      alert('Erro ao criar pedido, tente novamente.')
+    }
+  }
 
   return (
     <div className="flex h-full flex-col py-5">
@@ -53,7 +84,10 @@ const Cart = () => {
               </CardContent>
             </Card>
           </div>
-          <Button className=" relative bottom-0 mt-6 w-full">
+          <Button
+            onClick={handleFinishOrderClick}
+            className=" relative bottom-0 mt-6 w-full"
+          >
             Finalizar Pedido
           </Button>
         </>

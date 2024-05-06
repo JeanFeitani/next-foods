@@ -4,13 +4,13 @@ import { calculateProductTotalPrice } from '@/app/lib/price'
 import { Prisma } from '@prisma/client'
 import { createContext, useMemo, useState } from 'react'
 
-// type CartProductWithRestaurant = Prisma.ProductGetPayload<{
-//   include: { restaurant: { select: { deliveryFee: true } } }
-// }>
-
 export interface CartProduct
   extends Prisma.ProductGetPayload<{
-    include: { restaurant: { select: { deliveryFee: true } } }
+    include: {
+      restaurant: {
+        select: { deliveryFee: true; id: true; deliveryTimeMinutes: true }
+      }
+    }
   }> {
   quantity: number
 }
