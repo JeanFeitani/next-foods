@@ -30,8 +30,6 @@ const Header = () => {
   const handleSignInClick = () => signIn()
   const handleSignOutClick = () => signOut()
 
-  console.log(data)
-
   return (
     <div className="flex justify-between px-5 pt-6">
       <Link href="/" className="relative h-[30px] w-[100px]">

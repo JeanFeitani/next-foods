@@ -20,7 +20,11 @@ import {
 import { toast } from 'sonner'
 import { useRouter } from 'next/navigation'
 
-const Cart = () => {
+interface CartProps {
+  setIsOpen: (open: boolean) => void
+}
+
+const Cart = ({ setIsOpen }: CartProps) => {
   const { data } = useSession()
   const [inConfirmDialogOpen, setConfirmDialogOpen] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -60,22 +64,24 @@ const Cart = () => {
           },
         },
       })
-
       clearCart()
+
+      setIsOpen(false)
 
       toast('Pedido Finalizado', {
         description: 'Você pode acompanhà-lo na tela dos seus pedidos',
         action: {
           label: 'Meus Pedidos',
-          onClick: () => router.push('/my-order'),
+          onClick: () => router.push('/my-orders'),
         },
       })
     } catch (e) {
       toast.error('Erro ao Finalizar Pedido', {
         description: 'Algo deu errado ao tentar fazer o seu pedido',
       })
+    } finally {
+      setIsSubmitting(false)
     }
-    setIsSubmitting(false)
   }
 
   return (
@@ -130,7 +136,7 @@ const Cart = () => {
             </Button>
           </>
         ) : (
-          <h2>Sua sacola está vazia</h2>
+          <h2>Sua sacola esta vazia</h2>
         )}
       </div>
 

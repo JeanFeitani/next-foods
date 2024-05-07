@@ -18,8 +18,8 @@ interface CartBannerProps {
 }
 
 const CartBanner = ({ restaurant }: CartBannerProps) => {
-  const [isCartOpen, setIsCartOpen] = useState(false)
   const { products, totalPrice, totalQuantity } = useContext(CartContext)
+  const [isCartOpen, setIsCartOpen] = useState(false)
 
   const restaurantHasProductsOnCart = products.some(
     (product) => product.restaurantId === restaurant.id,
@@ -42,7 +42,6 @@ const CartBanner = ({ restaurant }: CartBannerProps) => {
             </span>
           </h3>
         </div>
-
         <Button onClick={() => setIsCartOpen(true)}>Ver sacola</Button>
 
         <Sheet open={isCartOpen} onOpenChange={setIsCartOpen}>
@@ -51,9 +50,7 @@ const CartBanner = ({ restaurant }: CartBannerProps) => {
               <SheetTitle className="text-left">Sacola</SheetTitle>
             </SheetHeader>
 
-            <Cart
-            // setIsOpen={setIsCartOpen}
-            />
+            <Cart setIsOpen={setIsCartOpen} />
           </SheetContent>
         </Sheet>
       </div>
