@@ -29,17 +29,17 @@ const Search = ({ yellow }: SearchProps) => {
   }
 
   return (
-    <form className="flex" onSubmit={handleSearchSubmit}>
+    <form className="flex gap-3" onSubmit={handleSearchSubmit}>
       <Input
         placeholder="Buscar restaurantes"
-        className="rounded-br-none rounded-tr-none border-none"
+        className="border-none"
         onChange={handleChange}
         value={search}
       />
       <Button
         size="icon"
         type="submit"
-        className={`${yellow ? '-ml-4 bg-yellow-400' : '-ml-4'}`}
+        className={`${yellow && 'bg-yellow-400'}`}
       >
         <SearchIcon size={20} />
       </Button>
