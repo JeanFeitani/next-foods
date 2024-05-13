@@ -55,5 +55,6 @@
 
   body {
     @apply text-foreground antialiased;
+    overflow-x: hidden;
   }
 }

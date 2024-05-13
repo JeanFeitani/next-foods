@@ -31,7 +31,7 @@ const Header = () => {
   const handleSignOutClick = () => signOut()
 
   return (
-    <div className="flex justify-between px-5 pt-6">
+    <div className="flex items-center justify-between px-5 pt-6 xl:py-5 ">
       <Link href="/" className="relative h-[30px] w-[100px]">
         <Image src="/logo.png" alt="Next Foods" fill quality={100} />
       </Link>

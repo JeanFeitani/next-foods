@@ -1,4 +1,4 @@
-import { Search, ChevronRightIcon } from 'lucide-react'
+import { ChevronRightIcon } from 'lucide-react'
 import { db } from '../lib/prisma'
 import CategoryList from './components/category-list'
 import Header from './components/header'
@@ -7,6 +7,8 @@ import PromoBanner from './components/promo-banner'
 import RestaurantList from './components/restaurant-list'
 import { Button } from './components/ui/button'
 import Link from 'next/link'
+import Search from './components/search'
+import MainBanner from './components/main-banner'
 
 const Home = async () => {
   const products = await db.product.findMany({
@@ -19,23 +21,35 @@ const Home = async () => {
   })
 
   return (
-    <>
-      <Header />
-      <div className="px-5 pt-6">
+    <div className="m-auto flex flex-col justify-center xl:max-w-[1224px]">
+      <div>
+        <Header />
+      </div>
+      <div className="px-5 pt-6 xl:hidden ">
         <Search />
       </div>
-      <div className="px-5 pt-6">
+
+      <div className="hidden overflow-hidden xl:block">
+        <MainBanner />
+      </div>
+
+      <div className="px-5 pt-6 xl:order-1">
         <CategoryList />
       </div>
-      <div className="px-5 pt-6">
+      <div className="px-5 pt-6 xl:order-3 xl:flex xl:w-[50%] xl:gap-4 xl:px-0">
         <PromoBanner
           src="/promo-banner-01.png"
           alt="Até 30% de desconto em pizzas!"
         />
+        <PromoBanner
+          src="/promo-banner-02.png"
+          alt="Até 30% de desconto em pizzas!"
+          className="hidden h-full w-full object-contain xl:block"
+        />
       </div>
-      <div className="space-y-4 pt-6 ">
+      <div className="space-y-4 pt-6 xl:order-2">
         <div className="flex items-center justify-between px-5">
-          <h2 className="font-semibold">Pedidos Recomendados</h2>
+          <h2 className="font-semibold xl:text-lg">Pedidos Recomendados</h2>
           <Button
             variant={'ghost'}
             className="h-fit p-0 text-primary hover:bg-transparent"
@@ -49,17 +63,17 @@ const Home = async () => {
         </div>
         <ProductList products={products} />
       </div>
-
-      <div className="px-5 pt-6">
+      <div className="px-5 pt-6 xl:order-3 xl:hidden">
         <PromoBanner
           src="/promo-banner-02.png"
           alt="A partir de R$17,90 em lanches"
         />
       </div>
-
-      <div className="space-y-4 py-6">
+      <div className="space-y-4 py-6 xl:order-4">
         <div className="flex items-center justify-between px-5">
-          <h2 className="font-semibold">Restaurantes Recomendados</h2>
+          <h2 className="font-semibold xl:text-lg">
+            Restaurantes Recomendados
+          </h2>
           <Button
             variant="ghost"
             className="h-fit p-0 text-primary hover:bg-transparent"
@@ -73,7 +87,7 @@ const Home = async () => {
         </div>
         <RestaurantList />
       </div>
-    </>
+    </div>
   )
 }
 
