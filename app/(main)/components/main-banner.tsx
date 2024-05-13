@@ -18,7 +18,7 @@ const MainBanner = () => {
 
         <div className="absolute -bottom-0 right-0 brightness-150">
           <Image
-            src="/image.png"
+            src="/lamen.png"
             alt="Banner"
             width={377}
             height={377}

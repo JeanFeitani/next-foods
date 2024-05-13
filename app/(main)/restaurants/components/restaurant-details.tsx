@@ -20,8 +20,8 @@ interface RestaurantDetailsProps {
 
 const RestaurantDetails = ({ restaurant }: RestaurantDetailsProps) => {
   return (
-    <div className="relative z-50 mt-[-1.5rem] rounded-tl-3xl rounded-tr-3xl bg-white py-5">
-      <div className="flex items-center justify-between px-5">
+    <div className="relative z-50 mt-[-1.5rem] rounded-tl-3xl rounded-tr-3xl bg-white py-5 xl:mt-0">
+      <div className="flex items-center justify-between px-5 xl:hidden">
         <div className="flex items-center gap-[0.375rem]">
           <div className="relative h-8 w-8 ">
             <Image
@@ -33,17 +33,17 @@ const RestaurantDetails = ({ restaurant }: RestaurantDetailsProps) => {
           </div>
           <h1 className="text-xl font-semibold">{restaurant.name}</h1>
         </div>
-        <div className="left-2 top-2 flex items-center gap-[3px] rounded-full bg-foreground px-2 py-[2px] text-white">
+        <div className="left-2 top-2 flex items-center gap-[3px] rounded-full bg-foreground px-2 py-[2px] text-white xl:hidden">
           <StarIcon size={12} className=" fill-yellow-400  text-yellow-400" />
           <span className="text-xs font-semibold">5.0</span>
         </div>
       </div>
 
-      <div className="mt-6 px-5">
+      <div className="mt-6 px-5 xl:hidden">
         <DeliveryInfo restaurant={restaurant} />
       </div>
 
-      <div className="mt-3 flex gap-4 overflow-x-scroll px-5 [&::-webkit-scrollbar]:hidden">
+      <div className="mt-3 flex gap-4 overflow-x-scroll px-5 xl:hidden [&::-webkit-scrollbar]:hidden">
         {restaurant.categories.map((category) => (
           <div
             className="min-w-[167px] rounded-lg bg-[#F4F4F4] text-center"
@@ -60,7 +60,7 @@ const RestaurantDetails = ({ restaurant }: RestaurantDetailsProps) => {
         <div key={category.id} className="mt-6 space-y-4">
           <h2 className="px-5 font-semibold">{category.name}</h2>
           {/* @ts-expect-error mudar isso em */}
-          <ProductsList products={category.products} />
+          <ProductsList soft products={category.products} />
         </div>
       ))}
     </div>

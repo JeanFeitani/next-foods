@@ -16,9 +16,10 @@ interface ProductItemProps {
     }
   }>
   className?: string
+  soft?: boolean
 }
 
-const ProductItem = ({ product, className }: ProductItemProps) => {
+const ProductItem = ({ product, className, soft }: ProductItemProps) => {
   return (
     <Link
       className={cn('min-w-[150px] xl:min-w-[180px]', className)}
@@ -53,9 +54,11 @@ const ProductItem = ({ product, className }: ProductItemProps) => {
               </span>
             )}
           </div>
-          <span className="block text-xs text-muted-foreground xl:text-sm">
-            {product.restaurant.name}
-          </span>
+          {!soft && (
+            <span className="block text-xs text-muted-foreground xl:text-sm">
+              {product.restaurant.name}
+            </span>
+          )}
         </div>
       </div>
     </Link>

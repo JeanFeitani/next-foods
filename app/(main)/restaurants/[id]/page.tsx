@@ -3,6 +3,9 @@ import { notFound } from 'next/navigation'
 import RestaurantImage from '../components/restaurant-image'
 import RestaurantDetails from '../components/restaurant-details'
 import CartBanner from '../components/cart-banner'
+import DeliveryInfo from '../../components/delivery-info'
+import Image from 'next/image'
+import { StarIcon } from 'lucide-react'
 
 interface RestaurantsPageProps {
   params: {
@@ -51,11 +54,66 @@ const RestaurantsPage = async ({ params: { id } }: RestaurantsPageProps) => {
 
   return (
     <div>
-      <RestaurantImage restaurant={restaurant} />
+      <div className="m-auto xl:max-w-[1224px]">
+        <div className="gap-8 px-5 xl:mt-6 xl:flex">
+          <div className="flex-1">
+            <RestaurantImage restaurant={restaurant} />
+          </div>
 
-      <RestaurantDetails restaurant={restaurant} />
+          <div className="hidden flex-1 xl:block">
+            <div className="mb-6 flex items-center justify-between">
+              <div className="flex items-center gap-[0.375rem]">
+                <div className="relative h-8 w-8 ">
+                  <Image
+                    src={restaurant.imageUrl}
+                    alt={restaurant.name}
+                    fill
+                    className="rounded-full object-cover"
+                  />
+                </div>
+                <h1 className="text-xl font-semibold">{restaurant.name}</h1>
+              </div>
+              <div className="left-2 top-2 flex items-center gap-[3px] rounded-full bg-foreground px-3 py-[4px] text-white ">
+                <StarIcon
+                  size={16}
+                  className=" fill-yellow-400  text-yellow-400"
+                />
+                <span className="text-sm font-semibold">5.0</span>
+              </div>
+            </div>
 
-      <CartBanner restaurant={restaurant}></CartBanner>
+            <DeliveryInfo restaurant={restaurant} />
+
+            <div className="overflow-x-scroll[&::-webkit-scrollbar]:hidden mt-3 flex gap-4">
+              {restaurant.categories.map((category) => (
+                <div
+                  className="w-full flex-1 rounded-lg bg-[#F4F4F4] text-center"
+                  key={category.id}
+                >
+                  <span className="text-xs text-muted-foreground">
+                    {category.name}
+                  </span>
+                </div>
+              ))}
+            </div>
+
+            <div className="mt-6 space-y-3 ">
+              <h3 className="font-semibold">Sobre</h3>
+              <p className="text-sm text-muted-foreground">
+                O SushiDojo é uma joia gastronômica que transporta seus clientes
+                para o coração do Japão, com sua atmosfera serena, design
+                minimalista e um balcão de sushi onde mestres habilidosos
+                preparam pratos autênticos com ingredientes frescos e
+                selecionados, garantindo uma experiência culinária excepcional e
+                memorável.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <RestaurantDetails restaurant={restaurant} />
+      </div>
+      <CartBanner restaurant={restaurant} />
     </div>
   )
 }

@@ -16,16 +16,16 @@ const RestaurantImage = ({ restaurant }: RestaurantImageProps) => {
   const handleBackClick = () => router.back()
 
   return (
-    <div className="relative h-[215px] w-full">
+    <div className="relative h-[215px] w-full xl:h-[380px] xl:w-[750px]">
       <Image
         src={restaurant.imageUrl}
         alt={restaurant.name}
-        className="object-cover"
+        className="rounded-md object-cover"
         fill
         quality={100}
       />
       <Button
-        className="absolute left-4 top-4 rounded-full bg-white text-foreground hover:text-white"
+        className="absolute left-4 top-4 rounded-full bg-white text-foreground hover:text-white xl:hidden"
         size="icon"
         onClick={handleBackClick}
       >
@@ -33,9 +33,9 @@ const RestaurantImage = ({ restaurant }: RestaurantImageProps) => {
       </Button>
       <Button
         size="icon"
-        className="absolute right-4 top-4  rounded-full bg-gray-700"
+        className="absolute right-4 top-4 rounded-full  bg-gray-700 xl:hidden"
       >
-        <HeartIcon size={20} className="fill-white" />
+        <HeartIcon size={20} className="fill-white xl:hidden" />
       </Button>
     </div>
   )

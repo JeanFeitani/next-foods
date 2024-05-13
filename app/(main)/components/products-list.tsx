@@ -11,12 +11,13 @@ interface ProductListProps {
       }
     }
   }>[]
+  soft?: boolean
 }
-const ProductList = ({ products }: ProductListProps) => {
+const ProductList = ({ products, soft }: ProductListProps) => {
   return (
     <div className="flex gap-4 overflow-x-scroll px-5 xl:gap-6 [&::-webkit-scrollbar]:hidden">
       {products.map((product) => (
-        <ProductItem key={product.id} product={product} />
+        <ProductItem key={product.id} product={product} soft={soft} />
       ))}
     </div>
   )

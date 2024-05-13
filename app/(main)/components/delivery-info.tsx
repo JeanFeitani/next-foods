@@ -8,7 +8,7 @@ interface DeliveryInfoProps {
 
 const DeliveryInfo = ({ restaurant }: DeliveryInfoProps) => {
   return (
-    <div className="flex justify-around rounded-md border py-3">
+    <div className="flex justify-around rounded-3xl border py-3 xl:flex-auto">
       <div className="text-center">
         <div className="flex items-center gap-1 text-muted-foreground">
           <span>Entrega</span>
