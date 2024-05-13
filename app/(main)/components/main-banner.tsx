@@ -1,6 +1,5 @@
 import Image from 'next/image'
 import Search from './search'
-import RamenIMG from '@/public/image.png'
 
 const MainBanner = () => {
   return (
@@ -19,7 +18,7 @@ const MainBanner = () => {
 
         <div className="absolute -bottom-0 right-0 brightness-150">
           <Image
-            src={RamenIMG}
+            src="/image.png"
             alt="Banner"
             width={377}
             height={377}
