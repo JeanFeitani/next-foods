@@ -1,14 +1,14 @@
 import { ChevronRightIcon } from 'lucide-react'
-import { db } from '../lib/prisma'
-import CategoryList from './components/category-list'
-import Header from './components/header'
-import ProductList from './components/products-list'
-import PromoBanner from './components/promo-banner'
-import RestaurantList from './components/restaurant-list'
-import { Button } from './components/ui/button'
+import { db } from './lib/prisma'
+import CategoryList from './(main)/components/category-list'
+import Header from './(main)/components/header'
+import ProductList from './(main)/components/products-list'
+import PromoBanner from './(main)/components/promo-banner'
+import RestaurantList from './(main)/components/restaurant-list'
+import { Button } from './(main)/components/ui/button'
 import Link from 'next/link'
-import Search from './components/search'
-import MainBanner from './components/main-banner'
+import Search from './(main)/components/search'
+import MainBanner from './(main)/components/main-banner'
 
 const Home = async () => {
   const products = await db.product.findMany({

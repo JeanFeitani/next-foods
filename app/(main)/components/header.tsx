@@ -23,8 +23,13 @@ import {
 import { Avatar, AvatarImage } from './ui/avatar'
 import { AvatarFallback } from '@radix-ui/react-avatar'
 import { Separator } from './ui/separator'
+import Search from './search'
 
-const Header = () => {
+interface HeaderProps {
+  searchBar?: boolean
+}
+
+const Header = ({ searchBar }: HeaderProps) => {
   const { data } = useSession()
 
   const handleSignInClick = () => signIn()
@@ -35,6 +40,11 @@ const Header = () => {
       <Link href="/" className="relative h-[30px] w-[100px]">
         <Image src="/logo.png" alt="Next Foods" fill quality={100} />
       </Link>
+      {searchBar && (
+        <div className="w-[50%]">
+          <Search />
+        </div>
+      )}
       <Sheet>
         <SheetTrigger asChild>
           <Button
