@@ -1,7 +1,7 @@
 import { db } from '@/app/lib/prisma'
 import { notFound } from 'next/navigation'
-import ProductImage from './components/product-image'
 import ProductDetails from './components/product-details'
+import ProductImage from '@/app/(main)/components/product-image'
 
 interface ProductPageProps {
   params: {
@@ -29,7 +29,9 @@ const ProductPage = async ({ params: { id } }: ProductPageProps) => {
 
   return (
     <div>
-      <ProductImage product={product} />
+      <div className="xl:hidden">
+        <ProductImage product={product} />
+      </div>
 
       <ProductDetails product={product} complementaryProducts={juices} />
     </div>

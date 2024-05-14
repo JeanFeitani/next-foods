@@ -4,14 +4,14 @@ import { formatCurrency } from '@/app/lib/price'
 import { CartContext } from '@/app/providers/context/cart-context'
 import { Restaurant } from '@prisma/client'
 import { useContext, useState } from 'react'
-import Cart from '../../components/cart'
-import { Button } from '../../components/ui/button'
+import Cart from '../../../(main)/components/cart'
+import { Button } from '../../../(main)/components/ui/button'
 import {
   Sheet,
   SheetContent,
   SheetHeader,
   SheetTitle,
-} from '../../components/ui/sheet'
+} from '../../../(main)/components/ui/sheet'
 
 interface CartBannerProps {
   restaurant: Pick<Restaurant, 'id'>

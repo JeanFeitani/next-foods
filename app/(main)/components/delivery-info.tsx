@@ -1,6 +1,7 @@
 import { BikeIcon, TimerIcon } from 'lucide-react'
 import { Restaurant } from '@prisma/client'
 import { formatCurrency } from '@/app/lib/price'
+import { Card } from './ui/card'
 
 interface DeliveryInfoProps {
   restaurant: Pick<Restaurant, 'deliveryFee' | 'deliveryTimeMinutes'>
@@ -8,7 +9,7 @@ interface DeliveryInfoProps {
 
 const DeliveryInfo = ({ restaurant }: DeliveryInfoProps) => {
   return (
-    <div className="flex justify-around rounded-3xl border py-3 xl:flex-auto">
+    <Card className="flex justify-around rounded-3xl py-3 xl:flex-auto">
       <div className="text-center">
         <div className="flex items-center gap-1 text-muted-foreground">
           <span>Entrega</span>
@@ -31,7 +32,7 @@ const DeliveryInfo = ({ restaurant }: DeliveryInfoProps) => {
           {Number(restaurant.deliveryTimeMinutes)} min
         </strong>
       </div>
-    </div>
+    </Card>
   )
 }
 

@@ -20,7 +20,7 @@ const RestaurantImage = ({ restaurant }: RestaurantImageProps) => {
       <Image
         src={restaurant.imageUrl}
         alt={restaurant.name}
-        className="rounded-md object-cover"
+        className="object-cover xl:rounded-md"
         fill
         quality={100}
       />
