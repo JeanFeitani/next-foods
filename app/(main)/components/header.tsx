@@ -45,6 +45,7 @@ const Header = ({ searchBar }: HeaderProps) => {
           <Search />
         </div>
       )}
+
       <Sheet>
         <SheetTrigger asChild>
           <Button

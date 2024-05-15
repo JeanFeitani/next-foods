@@ -28,6 +28,7 @@ import { ChevronLeftIcon, ChevronRightIcon } from 'lucide-react'
 import Image from 'next/image'
 import { useContext, useState } from 'react'
 import ProductImage from '../../../../(main)/components/product-image'
+import CartBanner from '@/app/(no)/restaurants/components/cart-banner'
 
 interface ProductDetailsProps {
   product: Prisma.ProductGetPayload<{
@@ -83,120 +84,133 @@ const ProductDetails = ({
 
   return (
     <>
-      <div className="relative z-50 mt-[-1.5rem] rounded-tl-3xl rounded-tr-3xl bg-white py-5 xl:mt-1">
-        <div className="xl:flex xl:gap-6 xl:px-5">
-          <div className="hidden xl:block">
-            <ProductImage product={product} />
-          </div>
-          <div
-            id="conteudo"
-            className="xl:rounded-lg xl:border xl:px-5 xl:py-10"
-          >
-            <div className="flex items-center gap-[0.375rem] px-5">
-              <div className="relative h-6 w-6 ">
-                <Image
-                  src={product.restaurant.imageUrl}
-                  alt={product.restaurant.name}
-                  fill
-                  className="rounded-full object-cover"
-                />
-              </div>
-              <span className="text-xs text-muted-foreground">
-                {product.restaurant.name}
-              </span>
+      <div className="m-auto xl:max-w-[1224px]">
+        <div className="xl:hidden ">
+          <ProductImage product={product} />
+        </div>
+        <div className="relative z-50 mt-[-1.5rem] rounded-tl-3xl rounded-tr-3xl bg-white py-5 xl:mt-1">
+          <div className="max-h-[500px] xl:flex xl:gap-6 xl:px-5">
+            <div className="hidden xl:block">
+              <ProductImage product={product} />
             </div>
-            <h1 className="mb-2 mt-1 px-5 text-xl font-semibold">
-              {product.name}
-            </h1>
-            <div className="flex justify-between px-5">
-              <div>
-                <div className="flex items-center gap-2">
-                  <h2 className="text-xl font-semibold">
-                    {formatCurrency(calculateProductTotalPrice(product))}
-                  </h2>
+            <div
+              id="conteudo"
+              className="flex-1 xl:rounded-lg xl:border xl:px-5 xl:py-10"
+            >
+              <div className="flex items-center gap-[0.375rem] px-5">
+                <div className="relative h-6 w-6 ">
+                  <Image
+                    src={product.restaurant.imageUrl}
+                    alt={product.restaurant.name}
+                    fill
+                    className="rounded-full object-cover"
+                  />
+                </div>
+                <span className="text-xs text-muted-foreground">
+                  {product.restaurant.name}
+                </span>
+              </div>
+              <h1 className="mb-2 mt-1 px-5 text-xl font-semibold">
+                {product.name}
+              </h1>
+              <div className="flex justify-between px-5">
+                <div>
+                  <div className="flex items-center gap-2">
+                    <h2 className="text-xl font-semibold">
+                      {formatCurrency(calculateProductTotalPrice(product))}
+                    </h2>
+                    {product.discountPercentage > 0 && (
+                      <DiscountBadge product={product} />
+                    )}
+                  </div>
                   {product.discountPercentage > 0 && (
-                    <DiscountBadge product={product} />
+                    <p className="text-sm text-muted-foreground">
+                      De: {formatCurrency(Number(product.price))}
+                    </p>
                   )}
                 </div>
-                {product.discountPercentage > 0 && (
-                  <p className="text-sm text-muted-foreground">
-                    De: {formatCurrency(Number(product.price))}
-                  </p>
-                )}
+                <div className="flex items-center gap-3 text-center">
+                  <Button
+                    onClick={handleDecreaseQuantityClick}
+                    size="icon"
+                    variant="ghost"
+                    className="border border-solid border-muted-foreground"
+                  >
+                    <ChevronLeftIcon />
+                  </Button>
+                  <span className="w-4">{quantity}</span>
+                  <Button onClick={handleIncreaseQuantityClick} size="icon">
+                    <ChevronRightIcon />
+                  </Button>
+                </div>
               </div>
-              <div className="flex items-center gap-3 text-center">
+              <div className="mt-6 px-5">
+                <DeliveryInfo restaurant={product.restaurant} />
+              </div>
+              <div className="mt-6 space-y-3 px-5">
+                <h3 className="font-semibold">Sobre</h3>
+                <p className=" text-sm text-muted-foreground">
+                  {product.description.substring(0, 250)}
+                </p>
+              </div>
+              <div className="hidden px-5 xl:block">
                 <Button
-                  onClick={handleDecreaseQuantityClick}
-                  size="icon"
-                  variant="ghost"
-                  className="border border-solid border-muted-foreground"
+                  onClick={handleAddToCartClick}
+                  className="mt-6 w-full font-semibold"
                 >
-                  <ChevronLeftIcon />
-                </Button>
-                <span className="w-4">{quantity}</span>
-                <Button onClick={handleIncreaseQuantityClick} size="icon">
-                  <ChevronRightIcon />
+                  Adicionar à sacola
                 </Button>
               </div>
-            </div>
-            <div className="mt-6 px-5">
-              <DeliveryInfo restaurant={product.restaurant} />
-            </div>
-            <div className="mt-6 space-y-3 px-5">
-              <h3 className="font-semibold">Sobre</h3>
-              <p className="text-sm text-muted-foreground">
-                {product.description}
-              </p>
             </div>
           </div>
-        </div>
-        <div className="mt-6 space-y-3">
-          <h3 className="px-5 font-semibold">Sucos</h3>
-          <ProductList products={complementaryProducts} />
-        </div>
-        <div className="px-5">
-          <Button
-            onClick={handleAddToCartClick}
-            className="mt-6 w-full font-semibold xl:hidden"
-          >
-            Adicionar à sacola
-          </Button>
-        </div>
-      </div>
-
-      <Sheet open={isCartOpen} onOpenChange={setIsCartOpen}>
-        <SheetContent className="w-[90vw]">
-          <SheetHeader className="text-left">
-            <SheetTitle>Sacola</SheetTitle>
-          </SheetHeader>
-          <Cart setIsOpen={setIsCartOpen}></Cart>
-        </SheetContent>
-      </Sheet>
-      <AlertDialog
-        open={isConfirmationDialogOpen}
-        onOpenChange={setIsConfirmationDialogOpen}
-      >
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>
-              Você tem produtos de outro restaurante na sacola. Deseja
-              continuar?
-            </AlertDialogTitle>
-            <AlertDialogDescription>
-              Se você continuar, os produtos anteriores serão removidos da
-              sacola.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>Cancelar</AlertDialogCancel>
-            <AlertDialogAction
-              onClick={() => addToCart({ shouldResetCart: true })}
+          <div className="mt-6 space-y-3">
+            <h3 className="px-5 font-semibold">Sucos</h3>
+            <ProductList products={complementaryProducts} />
+          </div>
+          <div className="px-5">
+            <Button
+              onClick={handleAddToCartClick}
+              className="mt-6 w-full font-semibold xl:hidden"
             >
-              Continuar
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+              Adicionar à sacola
+            </Button>
+          </div>
+        </div>
+        <Sheet open={isCartOpen} onOpenChange={setIsCartOpen}>
+          <SheetContent className="w-[90vw]">
+            <SheetHeader className="text-left">
+              <SheetTitle>Sacola</SheetTitle>
+            </SheetHeader>
+            <Cart setIsOpen={setIsCartOpen}></Cart>
+          </SheetContent>
+        </Sheet>
+        <AlertDialog
+          open={isConfirmationDialogOpen}
+          onOpenChange={setIsConfirmationDialogOpen}
+        >
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>
+                Você tem produtos de outro restaurante na sacola. Deseja
+                continuar?
+              </AlertDialogTitle>
+              <AlertDialogDescription>
+                Se você continuar, os produtos anteriores serão removidos da
+                sacola.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>Cancelar</AlertDialogCancel>
+              <AlertDialogAction
+                onClick={() => addToCart({ shouldResetCart: true })}
+              >
+                Continuar
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
+      </div>
+      <CartBanner restaurant={product.restaurant} />
     </>
   )
 }
