@@ -10,7 +10,6 @@ import { cn } from '@/app/lib/utils'
 import { useSession } from 'next-auth/react'
 import { toast } from 'sonner'
 import { toggleFavoriteRestaurant } from '@/app/actions/favorite-restaurant'
-import { useState } from 'react'
 
 interface RestaurantItemProps {
   restaurant: Restaurant
@@ -29,8 +28,6 @@ const RestaurantItem = ({
     (fav) => fav.restaurantId === restaurant.id,
   )
 
-  const [fav, setIsFav] = useState(isFavorite)
-
   const handleFavoriteClick = async () => {
     if (!data?.user.id) return
     try {
@@ -40,8 +37,6 @@ const RestaurantItem = ({
           ? 'Restaurante removido dos favoritos.'
           : 'Restaurante favoritado.',
       )
-
-      setIsFav((prev) => !prev)
     } catch (error) {
       toast.error('Erro ao favoritar restaurante.')
     }
@@ -71,7 +66,7 @@ const RestaurantItem = ({
           {data?.user.id && (
             <Button
               size="icon"
-              className={`absolute right-2 top-2 h-7 w-7 rounded-full bg-gray-700 xl:h-10 xl:w-10 ${fav ? 'bg-red-600' : ''}`}
+              className={`absolute right-2 top-2 h-7 w-7 rounded-full bg-gray-700 xl:h-10 xl:w-10 ${isFavorite ? 'bg-red-600' : ''}`}
             >
               <HeartIcon
                 className="h-4 w-4 fill-white text-base xl:h-[22px] xl:w-[22px]"

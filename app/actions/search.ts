@@ -14,3 +14,11 @@ export const searchForRestaurants = async (search: string) => {
 
   return restaurants
 }
+
+export const getUserFavoriteRestaurants = async (userId: string) => {
+  const UserFavoriteRestaurants = await db.userFavoriteRestaurant.findMany({
+    where: { userId },
+  })
+
+  return UserFavoriteRestaurants
+}

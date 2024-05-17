@@ -48,7 +48,7 @@ const Home = async () => {
         />
       </div>
       <div className="space-y-4 pt-6 xl:order-2 xl:px-5">
-        <div className="flex items-center justify-between px-5">
+        <div className="flex items-center justify-between px-5 xl:px-0">
           <h2 className="font-semibold xl:text-lg">Pedidos Recomendados</h2>
           <Button
             variant={'ghost'}
@@ -70,7 +70,7 @@ const Home = async () => {
         />
       </div>
       <div className="space-y-4 py-6 xl:order-4 xl:px-5">
-        <div className="flex items-center justify-between px-5">
+        <div className="flex items-center justify-between px-5 xl:px-0">
           <h2 className="font-semibold xl:text-lg">
             Restaurantes Recomendados
           </h2>

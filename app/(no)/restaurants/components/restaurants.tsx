@@ -1,28 +1,47 @@
 'use client'
 
-import { Restaurant } from '@prisma/client'
+import { Restaurant, UserFavoriteRestaurant } from '@prisma/client'
 import { useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import RestaurantItem from '@/app/(main)/components/restaurant-item'
-import { searchForRestaurants } from '@/app/actions/search'
+import {
+  getUserFavoriteRestaurants,
+  searchForRestaurants,
+} from '@/app/actions/search'
 import Header from '@/app/(main)/components/header'
 import Search from '@/app/(main)/components/search'
+import { useSession } from 'next-auth/react'
 
 const Restaurants = () => {
   const searchParams = useSearchParams()
   const [restaurants, setRestaurants] = useState<Restaurant[]>([])
+  const [userFavoriteRestaurants, setUserFavoriteRestaurants] = useState<
+    UserFavoriteRestaurant[]
+  >([])
+
+  const { data } = useSession()
+  const userId = data?.user?.id
 
   const searchFor = searchParams.get('search')
 
   useEffect(() => {
     const fetchRestaurants = async () => {
       if (!searchFor) return
+
       const foundRestaurants = await searchForRestaurants(searchFor)
+
       setRestaurants(foundRestaurants)
+
+      if (!userId) return
+
+      const foundUserFavoriteRestaurants =
+        await getUserFavoriteRestaurants(userId)
+
+      setUserFavoriteRestaurants(foundUserFavoriteRestaurants)
     }
 
     fetchRestaurants()
-  }, [searchFor])
+  }, [searchFor, userId])
 
   return (
     <>
@@ -50,6 +69,7 @@ const Restaurants = () => {
                 key={restaurant.id}
                 restaurant={restaurant}
                 className="min-w-full max-w-full"
+                userFavoriteRestaurants={userFavoriteRestaurants}
               />
             ))}
           </div>
