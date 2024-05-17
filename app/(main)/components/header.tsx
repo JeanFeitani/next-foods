@@ -137,7 +137,7 @@ const Header = ({ searchBar }: HeaderProps) => {
             <Button
               onClick={handleSignOutClick}
               variant="ghost"
-              className="w-full justify-start space-x-3 rounded-full  p-4 text-sm font-normal"
+              className="w-full justify-start space-x-3 rounded-full p-4 text-sm font-normal"
             >
               <LogOutIcon size={16} />
               <span>Sair da conta</span>

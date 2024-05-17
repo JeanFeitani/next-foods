@@ -29,6 +29,7 @@ import Image from 'next/image'
 import { useContext, useState } from 'react'
 import ProductImage from '../../../../(main)/components/product-image'
 import CartBanner from '@/app/(no)/restaurants/components/cart-banner'
+import { signIn, useSession } from 'next-auth/react'
 
 interface ProductDetailsProps {
   product: Prisma.ProductGetPayload<{
@@ -53,6 +54,9 @@ const ProductDetails = ({
     useState(false)
 
   const { addProductToCart, products } = useContext(CartContext)
+
+  const { data } = useSession()
+  const user = data?.user
 
   const addToCart = ({
     shouldResetCart = false,
@@ -155,7 +159,7 @@ const ProductDetails = ({
               </div>
               <div className="hidden px-5 xl:block">
                 <Button
-                  onClick={handleAddToCartClick}
+                  onClick={user ? handleAddToCartClick : () => signIn()}
                   className="mt-6 w-full font-semibold"
                 >
                   Adicionar à sacola
@@ -163,13 +167,13 @@ const ProductDetails = ({
               </div>
             </div>
           </div>
-          <div className="mt-6 space-y-3">
-            <h3 className="px-5 font-semibold">Sucos</h3>
+          <div className="mt-6 space-y-3 xl:px-5">
+            <h3 className="px-5 font-semibold xl:px-0">Sucos</h3>
             <ProductList products={complementaryProducts} />
           </div>
           <div className="px-5">
             <Button
-              onClick={handleAddToCartClick}
+              onClick={user ? handleAddToCartClick : () => signIn()}
               className="mt-6 w-full font-semibold xl:hidden"
             >
               Adicionar à sacola

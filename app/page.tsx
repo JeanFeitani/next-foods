@@ -29,25 +29,25 @@ const Home = async () => {
         <Search />
       </div>
 
-      <div className="hidden overflow-hidden xl:block">
+      <div className="hidden overflow-hidden px-5 xl:block">
         <MainBanner />
       </div>
 
       <div className="px-5 pt-6 xl:order-1">
         <CategoryList />
       </div>
-      <div className="px-5 pt-6 xl:order-3 xl:flex xl:w-[50%] xl:gap-4 xl:px-0">
+      <div className="px-5 pt-6 xl:order-3 xl:flex xl:w-[622px] xl:gap-4">
         <PromoBanner
           src="/promo-banner-01.png"
           alt="Até 30% de desconto em pizzas!"
         />
         <PromoBanner
           src="/promo-banner-02.png"
-          alt="Até 30% de desconto em pizzas!"
+          alt="A partir de R$17,90 em lanches"
           className="hidden h-full w-full object-contain xl:block"
         />
       </div>
-      <div className="space-y-4 pt-6 xl:order-2">
+      <div className="space-y-4 pt-6 xl:order-2 xl:px-5">
         <div className="flex items-center justify-between px-5">
           <h2 className="font-semibold xl:text-lg">Pedidos Recomendados</h2>
           <Button
@@ -63,13 +63,13 @@ const Home = async () => {
         </div>
         <ProductList products={products} />
       </div>
-      <div className="px-5 pt-6 xl:order-3 xl:hidden">
+      <div className="px-5 pt-6 xl:hidden">
         <PromoBanner
           src="/promo-banner-02.png"
           alt="A partir de R$17,90 em lanches"
         />
       </div>
-      <div className="space-y-4 py-6 xl:order-4">
+      <div className="space-y-4 py-6 xl:order-4 xl:px-5">
         <div className="flex items-center justify-between px-5">
           <h2 className="font-semibold xl:text-lg">
             Restaurantes Recomendados
