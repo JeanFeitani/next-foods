@@ -11,7 +11,7 @@ import {
   ScrollTextIcon,
 } from 'lucide-react'
 import Link from 'next/link'
-import { signIn, signOut, useSession } from 'next-auth/react'
+import { signOut, useSession } from 'next-auth/react'
 import {
   Sheet,
   SheetContent,
@@ -24,6 +24,9 @@ import { Avatar, AvatarImage } from './ui/avatar'
 import { AvatarFallback } from '@radix-ui/react-avatar'
 import { Separator } from './ui/separator'
 import Search from './search'
+import { useRouter } from 'next/navigation'
+import { useState } from 'react'
+import GoogleDialog from '@/app/(no)/products/[id]/components/google-dialog'
 
 interface HeaderProps {
   searchBar?: boolean
@@ -31,9 +34,11 @@ interface HeaderProps {
 
 const Header = ({ searchBar }: HeaderProps) => {
   const { data } = useSession()
+  const [isLoginDialogOpen, setIsLoginDialogOpen] = useState(false)
 
-  const handleSignInClick = () => signIn()
+  const handleSignInClick = () => setIsLoginDialogOpen(true)
   const handleSignOutClick = () => signOut()
+  const router = useRouter()
 
   return (
     <div className="flex items-center justify-between px-5 pt-6 xl:py-5">
@@ -122,6 +127,7 @@ const Header = ({ searchBar }: HeaderProps) => {
                 <Button
                   variant="ghost"
                   className="w-full justify-start space-x-3 rounded-full p-4 text-sm font-normal"
+                  onClick={() => router.push('/favorites')}
                 >
                   <HeartIcon size={16} />
                   <span>Favoritos</span>
@@ -130,21 +136,27 @@ const Header = ({ searchBar }: HeaderProps) => {
             )}
           </div>
 
-          <div className="py-6">
-            <Separator />
-          </div>
           {data?.user && (
-            <Button
-              onClick={handleSignOutClick}
-              variant="ghost"
-              className="w-full justify-start space-x-3 rounded-full p-4 text-sm font-normal"
-            >
-              <LogOutIcon size={16} />
-              <span>Sair da conta</span>
-            </Button>
+            <>
+              <div className="py-6">
+                <Separator />
+              </div>
+              <Button
+                onClick={handleSignOutClick}
+                variant="ghost"
+                className="w-full justify-start space-x-3 rounded-full p-4 text-sm font-normal"
+              >
+                <LogOutIcon size={16} />
+                <span>Sair da conta</span>
+              </Button>
+            </>
           )}
         </SheetContent>
       </Sheet>
+      <GoogleDialog
+        setIsLoginDialogOpen={setIsLoginDialogOpen}
+        isLoginDialogOpen={isLoginDialogOpen}
+      />
     </div>
   )
 }

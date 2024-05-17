@@ -13,7 +13,7 @@ const RecommendedRestaurants = async () => {
         <div className="flex w-full flex-col gap-6 xl:flex-row xl:flex-wrap xl:gap-5">
           {restaurants.map((restarurant) => (
             <RestaurantItem
-              className="flex max-w-full flex-col gap-6"
+              className="max-w-full gap-6"
               key={restarurant.id}
               restaurant={restarurant}
             />

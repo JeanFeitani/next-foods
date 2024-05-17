@@ -7,79 +7,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Restaurant {
-  id                  String     @id @default(uuid())
-  name                String
-  imageUrl            String
-  deliveryFee         Decimal    @db.Decimal(10, 2)
-  deliveryTimeMinutes Int
-  categories          Category[]
-  products            Product[]
-  orders              Order[]
-}
-
-model Category {
-  id          String       @id @default(uuid())
-  name        String
-  imageUrl    String
-  restaurants Restaurant[]
-  products    Product[]
-}
-
-model Product {
-  id                 String  @id @default(uuid())
-  name               String
-  description        String
-  imageUrl           String
-  price              Decimal @db.Decimal(10, 2)
-  discountPercentage Int     @default(0)
-
-  restaurant    Restaurant     @relation(fields: [restaurantId], references: [id])
-  restaurantId  String
-  category      Category       @relation(fields: [categoryId], references: [id])
-  categoryId    String
-  orderId       String?
-  orderProducts OrderProduct[]
-}
-
-model OrderProduct {
-  id       String @id @default(uuid())
-  quantity Int
-
-  product   Product @relation(fields: [productId], references: [id])
-  productId String
-
-  order   Order  @relation(fields: [orderId], references: [id])
-  orderId String
-}
-
-model Order {
-  id                  String         @id @default(uuid())
-  userId              String
-  user                User           @relation(fields: [userId], references: [id])
-  orderProducts            OrderProduct[]
-  restaurant          Restaurant     @relation(fields: [restaurantId], references: [id])
-  restaurantId        String
-
-  deliveryFee         Decimal        @db.Decimal(10, 2)
-  deliveryTimeInMinutes Int
-  subtotalPrice       Decimal        @db.Decimal(10, 2)
-  totalPrice          Decimal        @db.Decimal(10, 2)
-  totalDiscounts      Decimal        @db.Decimal(10, 2)
-  createdAt           DateTime       @default(now())
-
-  status              OrderStatus
-}
-
-enum OrderStatus {
-  PENDING
-  CONFIRMED
-  PREPARING
-  DELIVERING
-  COMPLETED
-  CANCELED
-}
-
 model Account {
   id                String  @id @default(cuid())
   userId            String  @map("user_id")
@@ -120,6 +47,8 @@ model User {
   sessions      Session[]
   orders        Order[]
 
+  userFavoriteRestaurants UserFavoriteRestaurant[]
+
   @@map("users")
 }
 
@@ -131,3 +60,88 @@ model VerificationToken {
   @@unique([identifier, token])
   @@map("verificationtokens")
 }
+model Restaurant {
+  id                  String     @id @default(uuid())
+  name                String
+  imageUrl            String
+  deliveryFee         Decimal    @db.Decimal(10, 2)
+  deliveryTimeMinutes Int
+  categories          Category[]
+  products            Product[]
+  orders              Order[]
+  userWhoFavorited UserFavoriteRestaurant[]
+}
+
+model UserFavoriteRestaurant {
+  userId       String
+  restaurantId String
+  createdAt    DateTime @default(now())
+
+  user       User       @relation(fields: [userId], references: [id])
+  restaurant Restaurant @relation(fields: [restaurantId], references: [id])
+
+  @@id([userId, restaurantId])
+}
+
+model Category {
+  id          String       @id @default(uuid())
+  name        String
+  imageUrl    String
+  restaurants Restaurant[]
+  products    Product[]
+}
+
+model Product {
+  id                 String  @id @default(uuid())
+  name               String
+  description        String
+  imageUrl           String
+  price              Decimal @db.Decimal(10, 2)
+  discountPercentage Int     @default(0)
+
+  restaurant    Restaurant     @relation(fields: [restaurantId], references: [id])
+  restaurantId  String
+  category      Category       @relation(fields: [categoryId], references: [id])
+  categoryId    String
+  orderId       String?
+  orderProducts OrderProduct[]
+}
+
+model OrderProduct {
+  id       String @id @default(uuid())
+  quantity Int
+
+  product   Product @relation(fields: [productId], references: [id])
+  productId String
+
+  order   Order  @relation(fields: [orderId], references: [id])
+  orderId String
+}
+
+model Order {
+  id            String         @id @default(uuid())
+  userId        String
+  user          User           @relation(fields: [userId], references: [id])
+  orderProducts OrderProduct[]
+  restaurant    Restaurant     @relation(fields: [restaurantId], references: [id])
+  restaurantId  String
+
+  deliveryFee           Decimal  @db.Decimal(10, 2)
+  deliveryTimeInMinutes Int
+  subtotalPrice         Decimal  @db.Decimal(10, 2)
+  totalPrice            Decimal  @db.Decimal(10, 2)
+  totalDiscounts        Decimal  @db.Decimal(10, 2)
+  createdAt             DateTime @default(now())
+
+  status OrderStatus
+}
+
+enum OrderStatus {
+  PENDING
+  CONFIRMED
+  PREPARING
+  DELIVERING
+  COMPLETED
+  CANCELED
+}
+

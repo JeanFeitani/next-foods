@@ -1,5 +1,4 @@
 'use client'
-
 import Cart from '@/app/(main)/components/cart'
 import DeliveryInfo from '@/app/(main)/components/delivery-info'
 import DiscountBadge from '@/app/(main)/components/discount-badge'
@@ -29,7 +28,8 @@ import Image from 'next/image'
 import { useContext, useState } from 'react'
 import ProductImage from '../../../../(main)/components/product-image'
 import CartBanner from '@/app/(no)/restaurants/components/cart-banner'
-import { signIn, useSession } from 'next-auth/react'
+import { useSession } from 'next-auth/react'
+import GoogleDialog from './google-dialog'
 
 interface ProductDetailsProps {
   product: Prisma.ProductGetPayload<{
@@ -52,6 +52,7 @@ const ProductDetails = ({
   const [isCartOpen, setIsCartOpen] = useState(false)
   const [isConfirmationDialogOpen, setIsConfirmationDialogOpen] =
     useState(false)
+  const [isLoginDialogOpen, setIsLoginDialogOpen] = useState(false)
 
   const { addProductToCart, products } = useContext(CartContext)
 
@@ -68,6 +69,10 @@ const ProductDetails = ({
   }
 
   const handleAddToCartClick = () => {
+    if (!user) {
+      return setIsLoginDialogOpen(true)
+    }
+
     const hasDifferentRestaurantProduct = products.some(
       (cartProduct) => cartProduct.restaurantId !== product.restaurantId,
     )
@@ -159,7 +164,7 @@ const ProductDetails = ({
               </div>
               <div className="hidden px-5 xl:block">
                 <Button
-                  onClick={user ? handleAddToCartClick : () => signIn()}
+                  onClick={handleAddToCartClick}
                   className="mt-6 w-full font-semibold"
                 >
                   Adicionar à sacola
@@ -173,7 +178,7 @@ const ProductDetails = ({
           </div>
           <div className="px-5">
             <Button
-              onClick={user ? handleAddToCartClick : () => signIn()}
+              onClick={handleAddToCartClick}
               className="mt-6 w-full font-semibold xl:hidden"
             >
               Adicionar à sacola
@@ -188,6 +193,11 @@ const ProductDetails = ({
             <Cart setIsOpen={setIsCartOpen}></Cart>
           </SheetContent>
         </Sheet>
+        <GoogleDialog
+          isLoginDialogOpen={isLoginDialogOpen}
+          setIsLoginDialogOpen={setIsLoginDialogOpen}
+        />
+
         <AlertDialog
           open={isConfirmationDialogOpen}
           onOpenChange={setIsConfirmationDialogOpen}
