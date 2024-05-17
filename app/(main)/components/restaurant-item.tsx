@@ -1,48 +1,84 @@
-import { Restaurant } from '@prisma/client'
+'use client'
+
+import { Restaurant, UserFavoriteRestaurant } from '@prisma/client'
 import { BikeIcon, HeartIcon, StarIcon, TimerIcon } from 'lucide-react'
 import Image from 'next/image'
 import { Button } from './ui/button'
 import Link from 'next/link'
 import { formatCurrency } from '@/app/lib/price'
 import { cn } from '@/app/lib/utils'
+import { useSession } from 'next-auth/react'
+import { toast } from 'sonner'
+import { toggleFavoriteRestaurant } from '@/app/actions/favorite-restaurant'
+import { useState } from 'react'
 
 interface RestaurantItemProps {
   restaurant: Restaurant
   className?: string
+  userFavoriteRestaurants: UserFavoriteRestaurant[]
 }
 
-const RestaurantItem = ({ restaurant, className }: RestaurantItemProps) => {
-  const desktop = true
+const RestaurantItem = ({
+  restaurant,
+  className,
+  userFavoriteRestaurants,
+}: RestaurantItemProps) => {
+  const { data } = useSession()
+
+  const isFavorite = userFavoriteRestaurants.some(
+    (fav) => fav.restaurantId === restaurant.id,
+  )
+
+  const [fav, setIsFav] = useState(isFavorite)
+
+  const handleFavoriteClick = async () => {
+    if (!data?.user.id) return
+    try {
+      await toggleFavoriteRestaurant(data?.user.id, restaurant.id)
+      toast.success(
+        isFavorite
+          ? 'Restaurante removido dos favoritos.'
+          : 'Restaurante favoritado.',
+      )
+
+      setIsFav((prev) => !prev)
+    } catch (error) {
+      toast.error('Erro ao favoritar restaurante.')
+    }
+  }
 
   return (
-    <Link
+    <div
       className={cn(
         'min-w-[266px] max-w-[266px] xl:min-w-[381px] xl:max-w-[381px]',
         className,
       )}
-      href={`/restaurants/${restaurant.id}`}
     >
       <div className="w-full space-y-3">
         <div className="relative h-[136px] w-full xl:h-[165px]">
-          <Image
-            src={restaurant.imageUrl}
-            fill
-            className="rounded-lg object-cover"
-            alt={restaurant.name}
-          />
-          <div className="absolute left-2 top-2 flex items-center gap-[2px] rounded-full bg-primary bg-white px-2.5 py-1">
-            <StarIcon
-              size={desktop ? 16 : 12}
-              className="fill-yellow-400 text-yellow-400"
+          <Link href={`/restaurants/${restaurant.id}`}>
+            <Image
+              src={restaurant.imageUrl}
+              fill
+              className="rounded-lg object-cover"
+              alt={restaurant.name}
             />
+          </Link>
+          <div className="absolute left-2 top-2 flex items-center gap-[2px] rounded-full bg-primary bg-white px-2.5 py-1">
+            <StarIcon className="h-3 w-3 fill-yellow-400 text-yellow-400 xl:h-4 xl:w-4" />
             <span className="text-xs font-semibold xl:text-sm">5.0</span>
           </div>
-          <Button
-            size="icon"
-            className="absolute right-2 top-2 h-7 w-7 rounded-full bg-gray-700 xl:h-10 xl:w-10"
-          >
-            <HeartIcon className="h-4 w-4 fill-white text-base xl:h-[22px] xl:w-[22px]" />
-          </Button>
+          {data?.user.id && (
+            <Button
+              size="icon"
+              className={`absolute right-2 top-2 h-7 w-7 rounded-full bg-gray-700 xl:h-10 xl:w-10 ${fav ? 'bg-red-600' : ''}`}
+            >
+              <HeartIcon
+                className="h-4 w-4 fill-white text-base xl:h-[22px] xl:w-[22px]"
+                onClick={handleFavoriteClick}
+              />
+            </Button>
+          )}
         </div>
         <div>
           <h3 className="text-sm font-semibold xl:text-base">
@@ -66,7 +102,7 @@ const RestaurantItem = ({ restaurant, className }: RestaurantItemProps) => {
           </div>
         </div>
       </div>
-    </Link>
+    </div>
   )
 }
 
