@@ -1,5 +1,5 @@
-import Header from '@/app/(main)/components/header'
 import ProductItem from '@/app/(main)/components/product-item'
+import RestaurantList from '@/app/(main)/components/restaurant-list'
 import { db } from '@/app/lib/prisma'
 import { notFound } from 'next/navigation'
 
@@ -32,11 +32,10 @@ const CategoriesPage = async ({ params: { id } }: CategoriesPageProps) => {
   }
 
   return (
-    <>
-      <Header />
-      <div className="px-5 py-6">
+    <div className="py-6">
+      <div className="px-5 ">
         <h2 className="mb-6 text-lg font-semibold">{category.name}</h2>
-        <div className="grid grid-cols-2 gap-6">
+        <div className="grid grid-cols-2 gap-6 xl:max-h-[550px] xl:grid-cols-6 xl:gap-4 xl:overflow-hidden">
           {category.products.map((product) => (
             <ProductItem
               key={product.id}
@@ -46,7 +45,11 @@ const CategoriesPage = async ({ params: { id } }: CategoriesPageProps) => {
           ))}
         </div>
       </div>
-    </>
+      <div>
+        <h2 className="mb-6 px-5 text-lg font-semibold">Restarantes</h2>
+        <RestaurantList />
+      </div>
+    </div>
   )
 }
 

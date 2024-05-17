@@ -57,9 +57,9 @@ const RestaurantDetails = ({ restaurant }: RestaurantDetailsProps) => {
       </div>
 
       {restaurant.categories.map((category) => (
-        <div key={category.id} className="mt-6 space-y-4">
-          <h2 className="px-5 font-semibold">{category.name}</h2>
-          {/* @ts-expect-error mudar isso em */}
+        <div key={category.id} className="mt-6 space-y-4 xl:px-5">
+          <h2 className="px-5 font-semibold xl:px-0">{category.name}</h2>
+          {/* @ts-expect-error ___ */}
           <ProductsList soft products={category.products} />
         </div>
       ))}

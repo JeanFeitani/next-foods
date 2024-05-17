@@ -36,15 +36,16 @@ const Header = ({ searchBar }: HeaderProps) => {
   const handleSignOutClick = () => signOut()
 
   return (
-    <div className="flex items-center justify-between px-5 pt-6 xl:py-5 ">
+    <div className="flex items-center justify-between px-5 pt-6 xl:py-5">
       <Link href="/" className="relative h-[30px] w-[100px]">
         <Image src="/logo.png" alt="Next Foods" fill quality={100} />
       </Link>
       {searchBar && (
-        <div className="w-[50%]">
+        <div className="hidden w-[50%] xl:block">
           <Search />
         </div>
       )}
+
       <Sheet>
         <SheetTrigger asChild>
           <Button
@@ -136,7 +137,7 @@ const Header = ({ searchBar }: HeaderProps) => {
             <Button
               onClick={handleSignOutClick}
               variant="ghost"
-              className="w-full justify-start space-x-3 rounded-full  p-4 text-sm font-normal"
+              className="w-full justify-start space-x-3 rounded-full p-4 text-sm font-normal"
             >
               <LogOutIcon size={16} />
               <span>Sair da conta</span>

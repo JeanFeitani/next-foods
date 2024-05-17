@@ -1,6 +1,5 @@
 import { getServerSession } from 'next-auth'
 import { redirect } from 'next/navigation'
-import Header from '../components/header'
 import OrderItem from './components/order-item'
 import { authOptions } from '@/app/lib/auth'
 import { db } from '@/app/lib/prisma'
@@ -28,8 +27,6 @@ const MyOrdersPage = async () => {
 
   return (
     <>
-      <Header />
-
       <div className="px-5 py-6">
         <h2 className="pb-6 text-lg font-semibold">Meus Pedidos</h2>
 

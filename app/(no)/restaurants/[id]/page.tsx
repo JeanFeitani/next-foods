@@ -1,11 +1,11 @@
 import { db } from '@/app/lib/prisma'
 import { notFound } from 'next/navigation'
 import RestaurantImage from '../components/restaurant-image'
-import RestaurantDetails from '../components/restaurant-details'
-import CartBanner from '../components/cart-banner'
-import DeliveryInfo from '../../components/delivery-info'
+import DeliveryInfo from '../../../(main)/components/delivery-info'
 import Image from 'next/image'
 import { StarIcon } from 'lucide-react'
+import RestaurantDetails from '../components/restaurant-details'
+import CartBanner from '../components/cart-banner'
 
 interface RestaurantsPageProps {
   params: {
@@ -55,7 +55,7 @@ const RestaurantsPage = async ({ params: { id } }: RestaurantsPageProps) => {
   return (
     <div>
       <div className="m-auto xl:max-w-[1224px]">
-        <div className="gap-8 px-5 xl:mt-6 xl:flex">
+        <div className="gap-8 xl:mt-6 xl:flex xl:px-5">
           <div className="flex-1">
             <RestaurantImage restaurant={restaurant} />
           </div>
